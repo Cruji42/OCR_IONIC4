@@ -1,0 +1,7 @@
+{
+  "name": "OCR",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
