@@ -10,12 +10,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Camera} from '@ionic-native/camera/ngx';
 import { File} from '@ionic-native/file/ngx';
+import { HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
+      HttpClientModule,
     IonicModule.forRoot(),
     AppRoutingModule
   ],
