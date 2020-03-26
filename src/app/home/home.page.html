@@ -1,10 +1,17 @@
+<ion-content>
 <ion-button (click)="takeSnap()">
   Tomar foto
 </ion-button>
 
 <img [src]="capturedSnapURL" />
-<p>{{texto}}</p>
+<ion-input type="text" [(ngModel)]="texto" name="text"></ion-input>
+
 
 <ion-button (click)="mandarIMG()">
   Reconocer Texto
 </ion-button>
+
+<ion-button (click)="traducirTXT()">
+  Traducir Texto
+</ion-button>
+</ion-content>

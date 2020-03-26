@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {stringify} from "querystring";
 
 @Component({
     selector: 'app-home',
@@ -12,7 +13,8 @@ export class HomePage {
     SERVER_URL = 'https://api.ocr.space/parse/image';
     capturedSnapURL: string;
     APIDATA: any = [];
-    texto = '';
+    TextTranslated: any = [];
+    texto = 'Example text';
     cameraOptions: CameraOptions = {
         quality: 20,
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -38,7 +40,7 @@ export class HomePage {
     mandarIMG() {
         const formData = new FormData();
         formData.append('base64Image', this.capturedSnapURL);
-        formData.append('language', 'eng');
+        formData.append('language', 'spa');
         formData.append('isOverlayRequired', 'false');
 
         const encabezados = 'd95a3e5b6a88957';
@@ -51,5 +53,17 @@ export class HomePage {
             },
             (err) => { console.log(err); }
         );
+    }
+    traducirTXT() {
+        // https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-es&text=Hello&key=trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f
+        const JSON = {
+            key: 'trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f',
+            lang: 'en-es',
+            text: this.texto};
+        this.httpClient.get('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-es&text=' + this.texto
+            + '&key=trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f').subscribe(data => {
+            this.TextTranslated = data;
+            this.texto = this.TextTranslated.text;
+        });
     }
 }
