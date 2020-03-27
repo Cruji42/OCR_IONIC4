@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {stringify} from "querystring";
 
 @Component({
     selector: 'app-home',
@@ -11,10 +10,13 @@ import {stringify} from "querystring";
 })
 export class HomePage {
     SERVER_URL = 'https://api.ocr.space/parse/image';
-    capturedSnapURL: string;
+    capturedSnapURL = '../assets/picture.png';
     APIDATA: any = [];
     TextTranslated: any = [];
-    texto = 'Example text';
+    textoEng = 'Example text';
+    textoEsp = 'Example text';
+    visible = false;
+    loading = false;
     cameraOptions: CameraOptions = {
         quality: 20,
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -25,12 +27,15 @@ export class HomePage {
     constructor(private camera: Camera, private httpClient: HttpClient) { }
 
     takeSnap() {
+        this.loading = true;
+        this.visible = false;
         this.camera.getPicture(this.cameraOptions).then((imageData) => {
             // this.camera.DestinationType.FILE_URI gives file URI saved in local
             // this.camera.DestinationType.DATA_URL gives base64 URI
 
-            let base64Image = 'data:image/jpeg;base64,' + imageData;
+            const base64Image = 'data:image/jpeg;base64,' + imageData;
             this.capturedSnapURL = base64Image;
+            this.mandarIMG();
         }, (err) => {
 
             console.log(err);
@@ -49,21 +54,23 @@ export class HomePage {
             (res: any) => {
             this.APIDATA = res;
             console.log(this.APIDATA.ParsedResults[0].ParsedText);
-            this.texto = this.APIDATA.ParsedResults[0].ParsedText;
+            this.textoEng = this.APIDATA.ParsedResults[0].ParsedText;
+            this.traducirTXT();
             },
             (err) => { console.log(err); }
         );
     }
     traducirTXT() {
-        // https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-es&text=Hello&key=trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f
         const JSON = {
             key: 'trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f',
             lang: 'en-es',
-            text: this.texto};
-        this.httpClient.get('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-es&text=' + this.texto
+            text: this.textoEng};
+        this.httpClient.get('https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-es&text=' + this.textoEng
             + '&key=trnsl.1.1.20200323T202341Z.ae6e2947f6b738f0.2df763f36712288588b51bc8d9bfc14fa5e6ea9f').subscribe(data => {
             this.TextTranslated = data;
-            this.texto = this.TextTranslated.text;
+            this.textoEsp = this.TextTranslated.text;
+            this.loading = false;
+            this.visible = true;
         });
     }
 }

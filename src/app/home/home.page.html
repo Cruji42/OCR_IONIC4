@@ -1,17 +1,36 @@
 <ion-content>
-<ion-button (click)="takeSnap()">
-  Tomar foto
-</ion-button>
 
-<img [src]="capturedSnapURL" />
-<ion-input type="text" [(ngModel)]="texto" name="text"></ion-input>
+<img [src]="capturedSnapURL"  style="display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%"/>
+  <div *ngIf="visible">
+<ion-row>
+  <ion-col>
+    <p>Inglés: </p>
+  </ion-col>
+  <ion-col>
+    <ion-input type="text" [(ngModel)]="textoEng" name="text"></ion-input>
+  </ion-col>
+</ion-row>
+  <ion-row>
+  <ion-col>
+    <p>Español: </p>
+  </ion-col>
+  <ion-col>
+    <ion-input type="text" [(ngModel)]="textoEsp" name="text"></ion-input>
+  </ion-col>
+</ion-row>
 
 
-<ion-button (click)="mandarIMG()">
-  Reconocer Texto
-</ion-button>
-
-<ion-button (click)="traducirTXT()">
-  Traducir Texto
-</ion-button>
+</div>
+  <div *ngIf="loading">
+    <img src="../../assets/Ellipsis-1s-200px%20(1).gif" style="height: 20%; width: auto; display: block; margin-left: auto; margin-right: auto">
+  </div>
+  <ion-button (click)="takeSnap()" style="display: block;
+              margin-left: auto;
+              margin-right: auto;
+margin-top: 10%">
+    Escanear
+  </ion-button>
 </ion-content>
